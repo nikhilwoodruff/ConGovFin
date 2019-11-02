@@ -2,12 +2,13 @@ let data = [];
 let svg = null;
 let width = null;
 let height = null;
-let excludedFields = ["GDP", "Population", "TotalSpending"];
 let loadData = function(d) {
-    if(!excludedFields.includes(d.Name)) {
+    let colours = {"Pensions": "#5a5a22", "Healthcare": "#5a5a22", "Education": "#22585a", "Defence": "#5a2922", "Welfare": "#22365a", "Protection": "#4a225a", "Transport": "#5a2243", "General Government": "#225a49", "Interest": "#5a5922", "Other": "#64645f"};
+    if(d.Category !== "Summary") {
         d.x = Math.random() * width;
         d.y = Math.random() * height;
         d.radius = Math.pow(d.FY10, 0.5) * 10;
+        d.colour = colours[d.Category];
         data.push(d);
     }
     if(d.Name == "TotalSpending") {
@@ -30,9 +31,9 @@ let main = function() {
     let bubblesE = bubbles.enter().append("circle")
         .classed("tipsy", true)
         .classed("bubble", true)
-        .attr("r", function(d) { return d.radius; })
-        .attr("fill", "#FFFFFF")
-        .attr("stroke", "#FFFFFF")
+        .attr("r", 0)
+        .attr("fill", function(d) { return d3.rgb(d.colour).brighter().brighter(); })
+        .attr("stroke", "#000000")
         .attr("stroke-width", 2)
         .on("mouseover", function(d) {
             console.log("over")
@@ -47,6 +48,7 @@ let main = function() {
             return tooltip.style("opacity", "0%");
         });
     bubbles = bubbles.merge(bubblesE);
+    bubbles.transition().attr("r", function(d) { return d.radius; });
     let ticked = function() {
         bubbles.attr("cx", function(d) { return d.x; }).attr("cy", function(d) { return d.y; });
     }
@@ -54,8 +56,8 @@ let main = function() {
     forceSim.stop();
     bubbles = bubbles.merge(bubblesE);
     forceSim.nodes(data);
-    let repelStrength = 0.04;
-    let gravityStrength = 0.02;
+    let repelStrength = 0.2;
+    let gravityStrength = 0.2;
     let charge = function(d) {
         return -Math.pow(d.radius, 2.0) * repelStrength;
     };
