@@ -2,13 +2,15 @@ let data = [];
 let svg = null;
 let width = null;
 let height = null;
+let categories = ["Summary", "Pensions", "Healthcare", "Education", "Defence", "Welfare", "Protection", "Transport", "General Government", "Interest", "Other"];
+let colours = {"Pensions": "#5a5a22", "Healthcare": "#5a5a22", "Education": "#22585a", "Defence": "#5a2922", "Welfare": "#22365a", "Protection": "#4a225a", "Transport": "#5a2243", "General Government": "#225a49", "Interest": "#5a5922", "Other": "#64645f"};
 let loadData = function(d) {
-    let colours = {"Pensions": "#5a5a22", "Healthcare": "#5a5a22", "Education": "#22585a", "Defence": "#5a2922", "Welfare": "#22365a", "Protection": "#4a225a", "Transport": "#5a2243", "General Government": "#225a49", "Interest": "#5a5922", "Other": "#64645f"};
     if(d.Category !== "Summary") {
         d.x = Math.random() * width;
         d.y = Math.random() * height;
         d.radius = Math.pow(d.FY10, 0.5) * 10;
         d.colour = colours[d.Category];
+        d.set = 0;
         data.push(d);
     }
     if(d.Name == "TotalSpending") {
@@ -62,7 +64,86 @@ let main = function() {
         return -Math.pow(d.radius, 2.0) * repelStrength;
     };
     forceSim.restart();
-    forceSim.force("charge", d3.forceManyBody().strength(charge));
-    forceSim.force('centerX', d3.forceX().strength(gravityStrength).x(width / 2));
-    forceSim.force('centerY', d3.forceY().strength(gravityStrength).y(height / 2));
+    let regOrg = function() {
+        forceSim.alpha(1).restart();
+        forceSim.force("charge", d3.forceManyBody().strength(charge));
+        forceSim.force('posX', d3.forceX().strength(gravityStrength).x(width / 2));
+        forceSim.force('poxY', d3.forceY().strength(gravityStrength).y(height / 2));
+    }
+    regOrg();
+    let padding = 0.2;
+    let catOrg = function() {
+        forceSim.alpha(1).restart();
+        forceSim.force("charge", d3.forceManyBody().strength(charge));
+        forceSim.force("posX", d3.forceX().strength(gravityStrength).x(function(d) {
+            return width * (padding + (1 - 2 * padding) * (categories.indexOf(d.Category) / categories.length));
+        }));
+    }
+    document.getElementById("regularOrg").onclick = regOrg;
+    document.getElementById("categoricalOrg").onclick = catOrg;
+    document.getElementById("fy10").onclick = function() {
+        data.forEach(function(d) {
+            d.radius = Math.pow(d.FY10, 0.5) * 10;
+        })
+        bubbles.transition().attr("r", function(d) { return d.radius; });
+    }
+    document.getElementById("fy11").onclick = function() {
+        data.forEach(function(d) {
+            d.radius = Math.pow(d.FY11, 0.5) * 10;
+        })
+        bubbles.transition().attr("r", function(d) { return d.radius; });
+        forceSim.alpha(1).restart();
+    }
+    document.getElementById("fy12").onclick = function() {
+        data.forEach(function(d) {
+            d.radius = Math.pow(d.FY12, 0.5) * 10;
+        })
+        bubbles.transition().attr("r", function(d) { return d.radius; });
+    }
+    document.getElementById("fy13").onclick = function() {
+        data.forEach(function(d) {
+            d.radius = Math.pow(d.FY13, 0.5) * 10;
+        })
+        bubbles.transition().attr("r", function(d) { return d.radius; });
+        forceSim.alpha(1).restart();
+    }
+    document.getElementById("fy14").onclick = function() {
+        data.forEach(function(d) {
+            d.radius = Math.pow(d.FY14, 0.5) * 10;
+        })
+        bubbles.transition().attr("r", function(d) { return d.radius; });
+    }
+    document.getElementById("fy15").onclick = function() {
+        data.forEach(function(d) {
+            d.radius = Math.pow(d.FY15, 0.5) * 10;
+        })
+        bubbles.transition().attr("r", function(d) { return d.radius; });
+        forceSim.alpha(1).restart();
+    }
+    document.getElementById("fy16").onclick = function() {
+        data.forEach(function(d) {
+            d.radius = Math.pow(d.FY16, 0.5) * 10;
+        })
+        bubbles.transition().attr("r", function(d) { return d.radius; });
+    }
+    document.getElementById("fy17").onclick = function() {
+        data.forEach(function(d) {
+            d.radius = Math.pow(d.FY17, 0.5) * 10;
+        })
+        bubbles.transition().attr("r", function(d) { return d.radius; });
+        forceSim.alpha(1).restart();
+    }
+    document.getElementById("fy18").onclick = function() {
+        data.forEach(function(d) {
+            d.radius = Math.pow(d.FY18, 0.5) * 10;
+        })
+        bubbles.transition().attr("r", function(d) { return d.radius; });
+    }
+    document.getElementById("fy19").onclick = function() {
+        data.forEach(function(d) {
+            d.radius = Math.pow(d.FY19, 0.5) * 10;
+        })
+        bubbles.transition().attr("r", function(d) { return d.radius; });
+        forceSim.alpha(1).restart();
+    }
 }

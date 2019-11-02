@@ -20,3 +20,12 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
     color: #222222;
 }
+html {
+    color: #64645f
+}
+button {
+    background-color: #333333;
+    color: #e4e4e4;
+    border: 2px solid #ffffff;
+    border-radius: 5px !important;
+}
