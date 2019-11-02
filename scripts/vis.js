@@ -38,15 +38,13 @@ let main = function() {
         .attr("stroke", "#000000")
         .attr("stroke-width", 2)
         .on("mouseover", function(d) {
-            console.log("over")
-            return tooltip.style("opacity", "100%").text(d.Name);
+            return tooltip.style("opacity", "100%").text(d.Name + ": " + (Math.round(Math.pow(d.radius / 10, 2) * 100) / 100) + "bn GBP");
             
         })
         .on("mousemove", function() {
             return tooltip.style("top", (event.pageY - 20) + "px").style("left", (event.pageX + 20) + "px");
         })
         .on("mouseout", function() {
-            console.log("out")
             return tooltip.style("opacity", "0%");
         });
     bubbles = bubbles.merge(bubblesE);
@@ -58,7 +56,7 @@ let main = function() {
     forceSim.stop();
     bubbles = bubbles.merge(bubblesE);
     forceSim.nodes(data);
-    let repelStrength = 0.2;
+    let repelStrength = 0.25;
     let gravityStrength = 0.2;
     let charge = function(d) {
         return -Math.pow(d.radius, 2.0) * repelStrength;
@@ -86,6 +84,7 @@ let main = function() {
             d.radius = Math.pow(d.FY10, 0.5) * 10;
         })
         bubbles.transition().attr("r", function(d) { return d.radius; });
+        forceSim.alpha(1).restart();
     }
     document.getElementById("fy11").onclick = function() {
         data.forEach(function(d) {
@@ -99,6 +98,7 @@ let main = function() {
             d.radius = Math.pow(d.FY12, 0.5) * 10;
         })
         bubbles.transition().attr("r", function(d) { return d.radius; });
+        forceSim.alpha(1).restart();
     }
     document.getElementById("fy13").onclick = function() {
         data.forEach(function(d) {
@@ -112,6 +112,7 @@ let main = function() {
             d.radius = Math.pow(d.FY14, 0.5) * 10;
         })
         bubbles.transition().attr("r", function(d) { return d.radius; });
+        forceSim.alpha(1).restart();
     }
     document.getElementById("fy15").onclick = function() {
         data.forEach(function(d) {
@@ -125,6 +126,7 @@ let main = function() {
             d.radius = Math.pow(d.FY16, 0.5) * 10;
         })
         bubbles.transition().attr("r", function(d) { return d.radius; });
+        forceSim.alpha(1).restart();
     }
     document.getElementById("fy17").onclick = function() {
         data.forEach(function(d) {
@@ -138,6 +140,7 @@ let main = function() {
             d.radius = Math.pow(d.FY18, 0.5) * 10;
         })
         bubbles.transition().attr("r", function(d) { return d.radius; });
+        forceSim.alpha(1).restart();
     }
     document.getElementById("fy19").onclick = function() {
         data.forEach(function(d) {
