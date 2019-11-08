@@ -79,74 +79,18 @@ let main = function() {
     }
     document.getElementById("regularOrg").onclick = regOrg;
     document.getElementById("categoricalOrg").onclick = catOrg;
-    document.getElementById("fy10").onclick = function() {
+    document.getElementById("compareYears").onclick = function() {
+        startYearStr = "FY" + (parseInt(document.getElementById("startYear").value) - 2000).toString();
         data.forEach(function(d) {
-            d.radius = Math.pow(d.FY10, 0.5) * 10;
+            d.startRadius = Math.pow(d[startYearStr], 0.5) * 10;
         })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy11").onclick = function() {
+        bubbles.transition().attr("r", function(d) { return d.startRadius; }).duration(250);
+        endYearString = "FY" + (parseInt(document.getElementById("endYear").value) - 2000).toString();
         data.forEach(function(d) {
-            d.radius = Math.pow(d.FY11, 0.5) * 10;
+            d.endRadius = Math.pow(d[endYearString], 0.5) * 10;
         })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy12").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY12, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy13").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY13, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy14").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY14, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy15").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY15, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy16").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY16, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy17").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY17, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy18").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY18, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy19").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY19, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
+        bubbles.transition().attr("r", function(d) { return d.endRadius; }).delay(250).duration(4000).on("end", function() {
+            forceSim.alpha(1).restart();
+        });
     }
 }
