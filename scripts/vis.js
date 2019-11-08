@@ -79,18 +79,11 @@ let main = function() {
     }
     document.getElementById("regularOrg").onclick = regOrg;
     document.getElementById("categoricalOrg").onclick = catOrg;
-    document.getElementById("compareYears").onclick = function() {
-        startYearStr = "FY" + (parseInt(document.getElementById("startYear").value) - 2000).toString();
+    document.getElementById("yearSlide").onchange = function() {
+        yearString = "FY" + (parseInt(Math.floor(document.getElementById("yearSlide").value * 0.99) / 10 + 10)).toString();
         data.forEach(function(d) {
-            d.startRadius = Math.pow(d[startYearStr], 0.5) * 10;
+            d.startRadius = Math.pow(d[yearString], 0.5) * 10;
         })
-        bubbles.transition().attr("r", function(d) { return d.startRadius; }).duration(250);
-        endYearString = "FY" + (parseInt(document.getElementById("endYear").value) - 2000).toString();
-        data.forEach(function(d) {
-            d.endRadius = Math.pow(d[endYearString], 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.endRadius; }).delay(250).duration(4000).on("end", function() {
-            forceSim.alpha(1).restart();
-        });
+        bubbles.transition().attr("r", function(d) { return d.startRadius; }).duration(1000);
     }
 }
