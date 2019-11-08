@@ -8,7 +8,7 @@ let loadData = function(d) {
     if(d.Category !== "Summary") {
         d.x = Math.random() * width;
         d.y = Math.random() * height;
-        d.radius = Math.pow(d.FY10, 0.5) * 10;
+        d.radius = Math.pow(d.FY10 / 10, 0.5) * 10;
         d.colour = colours[d.Category];
         d.set = 0;
         data.push(d);
@@ -38,8 +38,7 @@ let main = function() {
         .attr("stroke", "#000000")
         .attr("stroke-width", 2)
         .on("mouseover", function(d) {
-            return tooltip.style("opacity", "100%").text(d.Name + ": " + (Math.round(Math.pow(d.radius / 10, 2) * 100) / 100) + "bn GBP");
-            
+            return tooltip.style("opacity", "100%").text(d.Name + ": \u00A3" + (Math.round(Math.pow(d.radius / 10, 2))) + " per capita");
         })
         .on("mousemove", function() {
             return tooltip.style("top", (event.pageY - 20) + "px").style("left", (event.pageX + 20) + "px");
@@ -77,76 +76,21 @@ let main = function() {
             return width * (padding + (1 - 2 * padding) * (categories.indexOf(d.Category) / categories.length));
         }));
     }
+    let currentYear = null;
     document.getElementById("regularOrg").onclick = regOrg;
     document.getElementById("categoricalOrg").onclick = catOrg;
-    document.getElementById("fy10").onclick = function() {
+    document.getElementById("yearSlide").oninput = function() {
+        yr = parseInt(Math.floor(document.getElementById("yearSlide").value * 0.99) / 10 + 10);
+        yearString = "FY" + yr.toString();
+        if(currentYear == null) {
+            currentYear = yearString;
+        }
         data.forEach(function(d) {
-            d.radius = Math.pow(d.FY10, 0.5) * 10;
+            d.radius = Math.pow(d[yearString] / 10, 0.5) * 10;
+            d.colour = d3.interpolateLab("red", "green")(0.5 * (1 + Math.tanh(0.2 * (1 + d[yearString] / d[currentYear]))));
         })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy11").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY11, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy12").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY12, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy13").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY13, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy14").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY14, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy15").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY15, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy16").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY16, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy17").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY17, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy18").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY18, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
-    }
-    document.getElementById("fy19").onclick = function() {
-        data.forEach(function(d) {
-            d.radius = Math.pow(d.FY19, 0.5) * 10;
-        })
-        bubbles.transition().attr("r", function(d) { return d.radius; });
-        forceSim.alpha(1).restart();
+        document.getElementById("year").innerHTML = (yr + 2000).toString();
+        bubbles.transition().attr("r", function(d) { return d.radius; }).duration(1000);
+        bubbles.transition().attr("fill", function(d) { return d.colour; }).duration(1000);
     }
 }
