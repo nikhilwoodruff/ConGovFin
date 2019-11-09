@@ -133,8 +133,13 @@ let main = function() {
             
             document.getElementById("prevYear").innerHTML = "20" + prevYear.substring(2, 4) + " \u2192";
             prevYear = yearString;
-            document.getElementById("yearSlide").onchange();
+            
+            data.forEach(function(d) {
+                d.radius = Math.pow(d[yearString] / 10, 0.5) * 10;
+            })
+            bubbles.transition().attr("r", function(d) { return d.radius; }).duration(1000).delay(1000);
         }
+        
     }
     document.getElementById("changeCol").onclick = function() {
         colMode = "delta";
