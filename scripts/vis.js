@@ -2,6 +2,7 @@ let data = [];
 let svg = null;
 let width = null;
 let height = null;
+let colMode = "cat";
 let categories = ["Summary", "Pensions", "Healthcare", "Education", "Defence", "Welfare", "Protection", "Transport", "General Government", "Interest", "Other"];
 let colours = {"Pensions": "#5a5a22", "Healthcare": "#5a5a22", "Education": "#22585a", "Defence": "#5a2922", "Welfare": "#22365a", "Protection": "#4a225a", "Transport": "#5a2243", "General Government": "#225a49", "Interest": "#5a5922", "Other": "#64645f"};
 let loadData = function(d) {
@@ -38,6 +39,26 @@ let main = function() {
         .attr("stroke", "#000000")
         .attr("stroke-width", 2)
         .on("mouseover", function(d) {
+            if(colMode == "delta") {
+                nyr = parseInt(Math.floor(document.getElementById("yearSlide").value * 0.99) / 10 + 10);
+                nyearString = "FY" + yr.toString();
+                let preYear = "FY" + document.getElementById("prevYear").innerHTML.substring(2, 4);
+                let newFig = d[nyearString];
+                let oldFig = d[preYear];
+                let diff = newFig - oldFig;
+                let percentDiff = diff / oldFig * 100;
+                let out1 = (Math.round(diff * 10) / 10);
+                let out2 = (Math.round(percentDiff * 10) / 10);
+                if(out1 >= 0) {
+                    out1 = "+\u00A3" + out1.toString();
+                    out2 = "+" + out2.toString();
+                }
+                else {
+                    out1 = "-\u00A3" + out1.toString().substring(1, out1.length);
+                    out2 = out2.toString();
+                }
+                return tooltip.style("opacity", "100%").text(d.Name + ": \u00A3" + Math.round(newFig) + " per capita (" + out1 + ", " + out2 + "%)");
+            }
             return tooltip.style("opacity", "100%").text(d.Name + ": \u00A3" + (Math.round(Math.pow(d.radius / 10, 2))) + " per capita");
         })
         .on("mousemove", function() {
@@ -78,7 +99,7 @@ let main = function() {
     }
     let currentYear = null;
     let prevYear = null;
-    let colMode = "cat";
+    
     document.getElementById("regularOrg").onclick = regOrg;
     document.getElementById("categoricalOrg").onclick = catOrg;
     yr = parseInt(Math.floor(document.getElementById("yearSlide").value * 0.99) / 10 + 10);
