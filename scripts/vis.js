@@ -4,7 +4,7 @@ let width = null;
 let height = null;
 let colMode = "cat";
 let categories = ["Summary", "Pensions", "Healthcare", "Education", "Defence", "Welfare", "Protection", "Transport", "General Government", "Interest", "Other"];
-let colours = {"Pensions": "#5a5a22", "Healthcare": "#5a5a22", "Education": "#22585a", "Defence": "#5a2922", "Welfare": "#22365a", "Protection": "#4a225a", "Transport": "#5a2243", "General Government": "#225a49", "Interest": "#5a5922", "Other": "#64645f"};
+let colours = {"Pensions": "#e6194B", "Healthcare": "#f58231", "Education": "#ffe119", "Defence": "#bfef45", "Welfare": "#3cb44b", "Protection": "#42d4f4", "Transport": "#4363d8", "General Government": "#911eb4", "Interest": "#f032e6", "Other": "#a9a9a9"};
 let loadData = function(d) {
     if(d.Category !== "Summary") {
         d.x = Math.random() * width;
@@ -35,7 +35,7 @@ let main = function() {
         .classed("tipsy", true)
         .classed("bubble", true)
         .attr("r", 0)
-        .attr("fill", function(d) { return d3.rgb(d.colour).brighter().brighter(); })
+        .attr("fill", function(d) { return d3.rgb(d.colour); })
         .attr("stroke", "#000000")
         .attr("stroke-width", 2)
         .on("mouseover", function(d) {
@@ -148,7 +148,7 @@ let main = function() {
     document.getElementById("categoricalCol").onclick = function() {
         colMode = "cat";
         data.forEach(function(d) {
-            d.colour = d3.rgb(colours[d.Category]).brighter().brighter();
+            d.colour = d3.rgb(colours[d.Category]);
         })
         document.getElementById("prevYear").innerHTML = "";
         bubbles.transition().attr("fill", function(d) { return d.colour; }).duration(1000);
