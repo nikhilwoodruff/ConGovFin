@@ -39,6 +39,8 @@ let main = function() {
         .attr("stroke", "#000000")
         .attr("stroke-width", 2)
         .on("mouseover", function(d) {
+            nyr = parseInt(Math.floor(document.getElementById("yearSlide").value * 0.99) / 10 + 10);
+            nyearString = "FY" + yr.toString();
             if(colMode == "delta") {
                 nyr = parseInt(Math.floor(document.getElementById("yearSlide").value * 0.99) / 10 + 10);
                 nyearString = "FY" + yr.toString();
@@ -59,7 +61,7 @@ let main = function() {
                 }
                 return tooltip.style("opacity", "100%").text(d.Name + ": \u00A3" + Math.round(newFig) + " per capita (" + out1 + ", " + out2 + "%)");
             }
-            return tooltip.style("opacity", "100%").text(d.Name + ": \u00A3" + (Math.round(Math.pow(d.radius / 10, 2))) + " per capita");
+            return tooltip.style("opacity", "100%").text(d.Name + ": \u00A3" + (Math.round(d[nyearString])) + " per capita");
         })
         .on("mousemove", function() {
             return tooltip.style("top", (event.pageY - 20) + "px").style("left", (event.pageX + 20) + "px");
