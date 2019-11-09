@@ -133,6 +133,7 @@ let main = function() {
             
             document.getElementById("prevYear").innerHTML = "20" + prevYear.substring(2, 4) + " \u2192";
             prevYear = yearString;
+            document.getElementById("yearSlide").onchange();
         }
     }
     document.getElementById("changeCol").onclick = function() {
