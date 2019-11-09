@@ -25,7 +25,7 @@ let getSizing = function() {
     svg = d3.select("#graph").append("svg").attr("viewBox", "0 0 " + width + " 1000");
 }
 window.onload = getSizing;
-d3.csv("https://raw.githubusercontent.com/nwoodruff149/ConGovFin/master/data/gov-spending.csv", loadData);
+d3.csv("https://raw.githubusercontent.com/nikhilwoodruff/ConGovFin/master/data/gov-spending.csv", loadData);
 let main = function() {
     let tooltip = d3.select("body").append("div").attr("class", "tooltip-bubble");
     let bubbles = svg.selectAll(".bubble").data(data, function(d) {
