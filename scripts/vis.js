@@ -8,7 +8,7 @@ let loadData = function(d) {
     if(d.Category !== "Summary") {
         d.x = Math.random() * width;
         d.y = Math.random() * height;
-        d.radius = Math.pow(d.FY10 / 10, 0.5) * 10;
+        d.radius = Math.pow(d.FY14 / 10, 0.5) * 10;
         d.colour = colours[d.Category];
         d.set = 0;
         data.push(d);
@@ -77,8 +77,13 @@ let main = function() {
         }));
     }
     let currentYear = null;
+    let prevYear = null;
+    let colMode = "cat";
     document.getElementById("regularOrg").onclick = regOrg;
     document.getElementById("categoricalOrg").onclick = catOrg;
+    yr = parseInt(Math.floor(document.getElementById("yearSlide").value * 0.99) / 10 + 10);
+    yearString = "FY" + yr.toString();
+    document.getElementById("year").innerHTML = (yr + 2000).toString();
     document.getElementById("yearSlide").oninput = function() {
         yr = parseInt(Math.floor(document.getElementById("yearSlide").value * 0.99) / 10 + 10);
         yearString = "FY" + yr.toString();
@@ -87,10 +92,36 @@ let main = function() {
         }
         data.forEach(function(d) {
             d.radius = Math.pow(d[yearString] / 10, 0.5) * 10;
-            d.colour = d3.interpolateLab("red", "green")(0.5 * (1 + Math.tanh(0.2 * (1 + d[yearString] / d[currentYear]))));
         })
         document.getElementById("year").innerHTML = (yr + 2000).toString();
         bubbles.transition().attr("r", function(d) { return d.radius; }).duration(1000);
+    }
+    document.getElementById("yearSlide").onchange = function() {
+        if(colMode == "delta") {
+            yr = parseInt(Math.floor(document.getElementById("yearSlide").value * 0.99) / 10 + 10);
+            yearString = "FY" + yr.toString();
+            if(prevYear == null) {
+                prevYear = yearString;
+            }
+            data.forEach(function(d) {
+                d.colour = d3.interpolateLab("red", "green")(0.5 * (1 + Math.tanh(5 * (-1 + d[yearString] / d[prevYear]))));
+            })
+            bubbles.transition().attr("fill", function(d) { return d.colour; }).duration(1000);
+            
+            document.getElementById("prevYear").innerHTML = "20" + prevYear.substring(2, 4) + " \u2192";
+            prevYear = yearString;
+        }
+    }
+    document.getElementById("changeCol").onclick = function() {
+        colMode = "delta";
+        document.getElementById("yearSlide").onchange();
+    }
+    document.getElementById("categoricalCol").onclick = function() {
+        colMode = "cat";
+        data.forEach(function(d) {
+            d.colour = d3.rgb(colours[d.Category]).brighter().brighter();
+        })
+        document.getElementById("prevYear").innerHTML = "";
         bubbles.transition().attr("fill", function(d) { return d.colour; }).duration(1000);
     }
 }
